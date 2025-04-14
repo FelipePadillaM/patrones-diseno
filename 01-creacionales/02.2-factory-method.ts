@@ -35,19 +35,30 @@ interface Report {
 // Implementar SalesReport e InventoryReport
 
 class SalesReport implements Report {
-  // TODO: implementar el método e imprimir en consola:
+  generate(): void {
+    console.log('Generando reporte de %cventas...', COLORS.blue);
+  }
   // 'Generando reporte de ventas...'
 }
 
 class InventoryReport implements Report {
-  // TODO: implementar el método e imprimir en consola:
+  generate(): void {
+    console.log('Generando reporte de %cinventario...', COLORS.green);
+  }
   // 'Generando reporte de inventario...'
+}
+
+class HealthReport implements Report {
+  generate(): void {
+    console.log('Generando reporte de %csalud...', COLORS.red);
+  }
+  // 'Generando reporte de salud...'
 }
 
 // 3. Clase Base ReportFactory con el Método Factory
 
 abstract class ReportFactory {
-  abstract createReport(): Report;
+  protected abstract createReport(): Report;
 
   generateReport(): void {
     const report = this.createReport();
@@ -58,31 +69,41 @@ abstract class ReportFactory {
 // 4. Clases Concretas de Fábricas de Reportes
 
 class SalesReportFactory extends ReportFactory {
-  createReport(): Report {
-    throw new Error('Method not implemented.');
+  override createReport(): Report {
+    return new SalesReport();
   }
 }
 
 class InventoryReportFactory extends ReportFactory {
-  createReport(): Report {
-    throw new Error('Method not implemented.');
+  override createReport(): Report {
+    return new InventoryReport();
   }
 }
 
+class HealthReportFactory extends ReportFactory {
+  override createReport(): Report {
+    return new HealthReport();
+  }
+}
 // 5. Código Cliente para Probar
 
 function main() {
   let reportFactory: ReportFactory;
 
-  const reportType = prompt(
-    '¿Qué tipo de reporte deseas? %c(sales/inventory)',
-    COLORS.red
-  );
+  const reportType = prompt('¿Qué tipo de reporte deseas? %c(sales/inventory/health)');
 
-  if (reportType === 'sales') {
-    reportFactory = new SalesReportFactory();
-  } else {
-    reportFactory = new InventoryReportFactory();
+  switch (reportType?.toLowerCase()) {
+    case 'sales':
+      reportFactory = new SalesReportFactory();
+      break;
+    case 'inventory':
+      reportFactory = new InventoryReportFactory();
+      break;
+    case 'health':
+      reportFactory = new HealthReportFactory();
+      break;
+    default:
+      throw new Error('Tipo de reporte no válido.');
   }
 
   reportFactory.generateReport();
