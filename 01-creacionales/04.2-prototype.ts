@@ -11,19 +11,28 @@
  */
 
 class Pokemon {
-  name: string;
-  type: string;
-  level: number;
-  attacks: string[];
+  public name: string;
+  public type: string;
+  public level: number;
+  public attacks: string[];
 
   constructor(name: string, type: string, level: number, attacks: string[]) {
-    throw new Error('Method not implemented.');
+    this.name = name;
+    this.type = type;
+    this.level = level;
+    this.attacks = attacks;
   }
 
   // Método para clonar el Pokémon
   clone(): Pokemon {
     // Los ataques deben de evitar pasarse por referencia, es decir, no deben de ser el mismo arreglo.
     // Completar: Debe devolver un nuevo Pokémon con los mismos atributos
+    return new Pokemon(
+      this.name,
+      this.type,
+      this.level,
+      [...this.attacks] // Clonamos el arreglo de ataques
+    );
   }
 
   displayInfo(): void {
@@ -49,3 +58,39 @@ class Pokemon {
 
 // basePokemon.displayInfo(); // Aquí no debe de aparecer "Lanzallamas"
 // clone1.displayInfo();
+
+function main() {
+  // Crear un Pokémon base
+  const basePokemon = new Pokemon(
+    'Charmander',
+    'Fuego',
+    1,
+    ['Llamarada', 'Arañazo']
+  );
+
+  // Clonar el Pokémon base y modificar algunos atributos en los clones
+  const clone1 = basePokemon.clone();
+  clone1.name = 'Charmeleon';
+  clone1.level = 16;
+  clone1.attacks.push('Lanzallamas');
+
+  const clone2 = basePokemon.clone();
+  clone2.name = 'Charizard';
+  clone2.level = 36;
+  clone2.attacks.push('Vuelo');
+
+  // Mostrar información de cada Pokémon
+  console.log('Pokémon Base:');
+  console.log({ basePokemon });
+  basePokemon.displayInfo();
+
+  console.log('\nClone 1:');
+  console.log({ clone1 });
+  clone1.displayInfo();
+
+  console.log('\nClone 2:');
+  console.log({ clone2 });
+  clone2.displayInfo();
+}
+
+main();
